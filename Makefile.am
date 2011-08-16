@@ -9,7 +9,10 @@ ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES = libddsos.la
 
 ARCH=linux2.6
-INCLUDES := -Isrc/abstraction/os-net/include -Isrc/abstraction/os-net/$(ARCH)/include -Isrc/abstraction/os/include -Isrc/abstraction/os/$(ARCH)/include
+
+# There's a kooky convention that the abstract files should only require a #include "direct_name.h"
+# but if you have a platform specific file you will need to do #include "include/direct_name.h"
+INCLUDES := -Isrc/abstraction/os-net/include -Isrc/abstraction/os-net/$(ARCH) -Isrc/abstraction/os/include -Isrc/abstraction/os/$(ARCH)
 
 # os__time.h may not be necessary for use of library
 libdds_dir=src/abstraction/os/code
