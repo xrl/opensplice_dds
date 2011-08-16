@@ -1,0 +1,21 @@
+OpenSplice libdds
+
+Building for yourself
+
+1. run "libtoolize -c" or "glibtoolize -c"
+2. autoreconf -fv --install
+
+Notes
+
+Now it looks like I'll have to wrestle with the platform specific files. This one file in particular shows some strong platform dependence.
+
+  src/abstraction/pa/sparc/code/pa_abstract.c
+
+Will also copy how Suricata auto-discovers the current platform and let me sub in PLATFORM and ARCH. I want to support a range of platforms so let's look at this table for now
+
+  PLATFORM  |  ARCH
+  -----------------
+  Linux2.6  | x86
+  Linux2.6  | x86_64
+
+I will leave the original code for sparc and solaris but since I do not have any of these platforms I will be leaving them as a TODO.
