@@ -157,3 +157,14 @@ ospl_winln.obj
 release_info/RELEASE
 install/*.HDE*.opensplice.xml
 install/*.RTS*.opensplice.xml
+
+# Added by Xavier -- I guess Prismtech left that other stuff in by accident!
+
+aclocal.m4
+autom4te.cache/
+config.guess
+config.sub
+install-sh
+ltmain.sh
+m4/
+missing
