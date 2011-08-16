@@ -1,0 +1,2944 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <title>OpenSplice DDS Release Notes - Changes and Fixed Bugs V5</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="../css/prismstyle.css" type="text/css">
+  </head>
+  <body>
+    <p class="back">
+      <a href="releasenotes.html">
+        Back to Release Notes Page<img src="../images/back.gif" align="middle"
+        height="25" width="30" alt="Back">
+      </a>
+    </p>
+
+    <h1>Fixed Bugs and Changes V5 series</h1>
+    <h2>Contents</h2>
+    <ul>
+      <li><a href="#highlights">Release Highlights</a></li>
+      <li><a href="#issues_not_api">Fixed Bugs and Changes not affecting API</a></li>
+      <li><a href="#issues_api">Fixed Bugs and Changes affecting API</a></li>
+    </ul>
+    <hr>
+    This page contains a list of all bugfixes and changes incorporated in
+    OpenSplice V5.x series of releases<br>
+
+    <h2><a name="highlights">Release Highlights</a></h2>
+    <h3>OpenSplice DDS V5.4.1 contains the following new features:</h3>
+    <p>
+       <ul>
+          <li>A brand new beta implementation of DDSI, known now as DDSI2 is now released.
+          In this release the old DDSI is still available, but is now deprecated and 
+          will be removed in the next major/minor release. 
+          For more information on what DDSI2 supports then see the
+          <a href="ddsi2_release_notes.html"> DDSI2 release notes.</a></li>
+          <li>Added support for resource_limits.max_instances QoS on a DataWriter</a></li>
+          <li>The size of the OpenSplice shared memory database segment size can now be set
+          using "friendlier" terms, such as 256M or 2G.</a></li>
+       </ul>
+    </p>       
+    <h3>OpenSplice DDS V5.4 contains the following new features:</h3>
+    <p>
+       <ul>
+          <li>Robustness added for exhaustion of shared memory. OpenSplice DDS 
+          will now ensure shared memory does not run out:
+          <ul>
+             <li>If shared memory is running low then API calls that allocate 
+             resources (such as write) will return out of resources. Calls that 
+             do not allocate resources like delete calls or lookup calls are still allowed.
+             </li>
+             <li>Minimum shared memory size has increased from 1MB to 2MB.
+             </li>
+             <li>A configurable threshold has been added as a sub element under 
+             the 'Database' element in the XML Configuration. See the deployment 
+             manual for more info
+             </li>
+             <li>Configurable warning levels have been added for all resource limits.
+             Once certain warning levels are reached a warning message will be printed
+             to the info log. This is to help detection of overzealous resource 
+             usage by applications.  See the deployment manual (New element is 
+             called 'ResourceLimits' and can be found under the 'Domain' element)
+             for more information.
+             </li>
+          </ul>
+          </li>
+          <li>The OpenSplice daemon can now be installed as a Windows service.
+          In order to achieve this you must select the following options during 
+          product installation:
+          <ul>
+             <li>OpenSplice Installation Scope - All Users</li>
+             <li>Global Data Space Sharing - Share Data Between All Users</li>
+             <li>Set-up OpenSplice Environment Variables - Yes</li>
+             <li>Install the OpenSplice Daemon as a Windows Service - Yes</li>
+          </ul>
+          <p>The Windows service will run as the user account LocalSystem and be 
+          configured for automatic start at machine reboot. You can change
+          these values using the Windows MMC Administrative Tools Services snap-in.
+          The daemon will run the default configured OpenSplice domain. There is an
+          issue with log files when running under a windows service. See the 
+          <a href="knownissues.html">Known Issues</a>
+          </p>
+          </li>
+          <li>The OpenSplice daemon will now clean up invalid processes and temporary files
+          on windows when starting to clear problems caused by an unexpected termination
+          of the daemon previously. 
+          </li>
+          <li>
+          Implementation of new APIs:<br>
+          DataWriter; get_matched_subscriptions(), get_matched_subscription_data()
+          and get_publication_matched_status()<br>
+          DataReader; get_matched_publications(), get_matched_publication_data() and
+          get_subscription_matched_status()<br>
+          DataWriterListener; on_publication_matched()<br>
+          DataReaderListener; on_subscription_matched()
+          </li>
+         <li>Support for Windows CE 6.0 armv4i platform (32bit)
+          </li>
+          <li>Secure Networking support for Windows CE 6.0 armv4i platform (32bit)
+          </li>
+          <li>Support for VxWorks 5.5.1 PENTIUM target hosted on WindowsXP (32bit)
+          </li>
+          <li>DLRL is now supported on Windows platforms
+          </li>
+          <li>
+          <p>New DDS Examples have been added for enterprise platforms (see the examples directory)
+             <ul>
+               <li>BuiltInTopics - The BuiltInTopics example is used to illustrate
+               the use of built-in topics to obtain and print all nodes running 
+               in the domain.
+               </li>
+               <li>ContentFilteredTopic - The StockQuote example is used to 
+               illustrate message filtering based upon Content-Based subscription.
+               </li>
+               <li>Durability - The durability example illustrates the ability 
+               of late joining readers to obtain data that has already been 
+               published before these readers were created.
+               </li>
+               <li>HelloWorld - The basic HelloWorld example is used to illustrate
+               the necessary steps to setup DCPS entities.
+               </li>
+               <li>Listener - The HelloWorld_Listener example is used to 
+               illustrate use of listeners.
+               </li>
+               <li>Ownership - The ownership example is used to illustrate the 
+               concept of Shared Ownership, controlled through QoS.
+               </li>
+               <li>QueryCondition - The StockQuote example is used to illustrate 
+               message filtering through use of Queries.
+               </li>
+               <li>WaitSet - The basic HelloWorld_Waitset example is used to 
+               illustrate the use of waitset and Read, Status, Query and Guard 
+               conditions.
+               </li>
+            </ul>
+          <p>
+          <a href="../../examples/dcps/README.html">See the new examples html for further information</a> 
+          </p>
+          </p>
+          </li>
+          <li>The src/api/cm/jni component which was part of the commercial source
+          code base has been moved to the opensource source code base.
+          </li>
+          <li>OpenSplice's default network configuration at version 5.3 used ports
+              53340, 53350, & 53360. These ports were also used as the default for
+              some incompatible OpenSplice 4.x versions. Running incompatible 
+              versions of OpenSplice on the same ports produced warnings in the 
+              OpenSplice Info log. To help avoid this situation OpenSplice 5.4 
+              ships with a default configuration of ports 53370, 53380, & 53390.
+          </li>
+       </ul>
+    </p>
+
+    <h3>OpenSplice DDS V5.3 contains the following new features:</h3>
+    <p>
+       <ul>
+          <li>Merge Policies
+          <p>
+             So far the OpenSplice DDS durability service was not able to handle 
+             the so-called "split-brain syndrome". A split-brain syndrome can be 
+             described as the situation in which two different nodes (possibly) 
+             have a different perception on (part of) the set of historical 
+             data. This split-brain occurs when two nodes or two sets of nodes 
+             (i.e. two systems) that are participating in the same DDS domain 
+             have been running separately for some time and suddenly get 
+             connected to each other. Equally this syndrome arises when nodes 
+             re-connect after being disconnected for some time. Applications on 
+             these nodes may have been publishing information for the same topic 
+             in the same partition without this information reaching the other 
+             party. Therefore their perception on the set of data will be 
+             different.
+             
+             Because of the new emerging environments in which OpenSplice DDS 
+             is deployed, the durability service has been extended with 
+             additional functionality to support the alignment of historical 
+             data when two nodes get connected. Of course, the basic use case 
+             of a newly started node joining an existing system is supported, 
+             but in contradiction to that situation there is no universal truth 
+             in determining who has the best (or the right) information when 
+             two already running nodes (re)connect.  When this situation 
+             occurs, the durability service now provides the possibility to 
+             configure its behaviour in this situation in the form of so-called 
+             merge policies. The following options are supported:
+             <ul>
+              <li>Ignore (default)<br/>
+              Ignore the situation and take no action at all. This means new 
+              knowledge is not actively built up. Durability is passive and will 
+              only build up knowledge that is implicitly received from that 
+              point forward.</li>
+              <li>Delete<br/>
+              Delete all historical data by deleting all old knowledge and new 
+              knowledge is not actively built up. Durability is passive and
+              will only build up knowledge that is implicitly received from
+              that point forward.</li>
+              <li>Replace<br/>
+              Replace all historical data by the data set that is available 
+              on the connecting node.</li>
+              <li>Merge<br/>
+              Merge the historical data with the data set that is available 
+              on the connecting node.</li>
+            </ul>
+          </p>
+         </li>
+         <li>Real Time System Monitoring (RTSM) - beta for Linux only
+          <p>
+             The RunTime System Monitor (RTSM) is a commandline tool that allows
+             monitoring of metrics and statistics provided by OpenSplice. It can
+             show delta's on for example reader-statistics and reset them. The 
+             tool is currently in a beta-stage and is only delivered with 
+             Linux-based builds. The tool can be driven through an interactive 
+             menu, or by passing options/commands through the command line or a 
+             file.
+          </p>
+          <p>
+             The tool contains explanation of the available options, which can 
+             be displayed by calling 'rtsm -h'. If you have a domain running 
+             with the name "OpenSpliceWithStats", where statistics for readers 
+             are enabled, you can issue the following command: <br><br>
+             > rtsm -domain OpenSpliceWithStats -count 5 -readerSort -exit<br><br>
+             It will first set the domain to "OpenSpliceWithStats". It will set 
+             the number of iterations to show statistics to 5, and then run a 
+             readerSort. When finished it will exit.<br><br>
+             
+             The same can be achieved in the interactive mode by calling:<br><br>
+             > rtsm <br>
+             Then type '4 <RET>' # SETTINGS-menu <br>
+             Then type '17 <RET>' # set domain-name <br>
+             Then type the domain-name: 'OpenSpliceWithStats <RET>' <br>
+             Then type '13 <RET>' # set count <br>
+             Then type the count: '5 <RET>' <br>
+             Then type '0 <RET>' # back <br>
+             Then type '1 <RET>' # show readerSort <br>
+             Then, when finished, type '0 <RET>' # exit <br> <br>
+             Interactive and commandline-mode can also be combined.
+         </p>
+         </li>
+       </ul>
+    </p>
+    <p>
+       <h3>OpenSplice DDS V5.2.2 contains the following new features:</h3>
+       <ul>
+          <li>Support for Aonix PERC VM under ElinOS 4.2 on x86 target platform with OpenFusion Real Time ORB Java Edition
+          <p>
+          When rebuilding the CORBA Java interface, PERC may be used instead of the Sun JDK. Source the percenv.sh script and set SPLICE_JDK=perc
+          before running the OpenSplice release.com. This will also cause the example build and run scripts to use PERC.
+          </p>
+         </li>
+       </ul>
+    </p>
+    <p>
+       <h3>OpenSplice DDS V5.2.1 contains the following new features:</h3>
+       <ul>
+          <li>Support for ElinOS 4.2 on x86 target platform with OpenFusion Real Time ORB Java Edition
+         </li>
+       </ul>
+    </p>
+    <p>
+      <h3>OpenSplice DDS V5.2.0p1 contains the following new features:</h3>
+       <ul>
+         <li>Support for linux hosted VxWorks 6.5 PPC745x.
+        </li>
+       </ul>
+    </p>
+    <p>
+       <h3>OpenSplice DDS V5.2 contains the following new features:</h3>
+       <ul>
+       <li>Dynamic namespaces
+      <p>
+      The durability service now has the capability to discover namespaces from other nodes at runtime. This can significantly
+      reduce configuration effort in large-scale systems, while also enabling OpenSplice to run in more dynamic environments.
+      </p>
+         </li>
+         <li>Support for Solaris 9 gcc 3.4.2 platform
+         </li>
+         <li>For C# OpenSplice DDS is now available from the Global Assembly Cache
+            <p>
+            For C#, there is now a signed and versioned Assembly called dcpssacsAssembly.dll, created from the 
+            the dcpssacs.dll module, which is added to the Global Assembly cache. In this release, 
+            as part of the installation, this is added to the global assembly cache.
+            </p>
+         </li>
+         <li>OpenSplice can be configured to allow a single application to operate in multiple domains concurrently
+            <p>
+             See the OpenSplice Documentation Set for detailed information. 
+            </p>
+         </li>
+         <li>Support for coherent updates
+            <p>
+             Implementation available for the coherent access PRESENTATION QoS policy for INSTANCE (existing)
+             and TOPIC (new) access_scopes <br><br>
+             See the OpenSplice Documentation Set for detailed information. 
+            </p>
+         </li>
+         <li>Now provides a way to dispose all the instances of a topic in one call and to notify the
+         receivers in one notification.
+            <p>
+             This functionality allows an application to dispose of all of the instances
+             for a particular topic without the overhead of using an individual 
+             dispose call for each instance individually. Its effect is equivalent to
+             invoking a separate dispose operation for each individual instance
+             on the DataWriter that owns it<br<br>
+             See the OpenSplice Documentation Set for detailed information. 
+            </p>
+         </li>
+       </ul>
+    </p>
+    <p>
+       <h3>OpenSplice DDS V5.1.1 contains the following new features:</h3>
+       <ul>
+         <li>Support for Windows 7 platform
+            <p>
+             Added Windows 7 32 bit support with Microsoft Visual Studio 2008.
+            </p>
+         </li>
+         <li>Support for OpenFusion Real Time ORB Java Edition
+            <p>
+             OpenFusion Real Time ORB Java Edition is now tested with OpenSplice DDS. Additional
+             examples have been provided to allow users to get started quickly. In a future release
+             documentation updates will be made to the manuals.
+            </p>
+         </li>
+         <li>Symbolic network interface names supported on Window
+            <p>
+             With Linux or Unix platforms, it is possible to specify the symbolic name
+             of a networking interface to be used, like eth0, eth1, wlan0 etc. In this
+             release this concept is now supported on Windows using "friendly names",
+             which are unique symbolic names tied to each interface. 
+            </p>
+         </li>
+       </ul>
+    </p>
+    <p>
+       <h3>OpenSplice DDS V5.1 contains the following new features:</h3>
+       <ul>
+         <li>Compiled with JAVA6
+            <p>
+             OpenSplice DDS V5.x is compiled with JDK1.6, but can run on a Java 5 JRE as
+             the compile flag -source 1.5 is set
+            </p>
+         </li>
+         <li>Data compression at the network level
+            <p>
+             OpenSplice DDS can be configured to use zlib compression <a href="http://www.zlib.net/"> www.zlib.net</a>
+             to compress network packets. See the OpenSplice Documentation set for further information.
+            </p>
+         </li>
+         <li>Ability to add your own reporting plugin
+            <p>
+             OpenSplice DDS can be configured to use an external reporting library.
+             See the OpenSplice Documentation set for further information.
+             This functionality is not available on the embedded platforms (VxWorks or Integrity)
+            </p>
+         </li>
+         <li>Domain identification
+            <p>
+             A DomainId consists of a string that represents either a URI to the
+             location of the configuration file (e.g. 'file:///projects/DDS/ospl.xml') or the
+             Domain name as specified in the configuration file. The actual value returned is
+             dependent of the value used when creating the DomainParticipant, also see the
+             DomainParticipantFactory create_participant operation. If a DomainParticipant
+             is created using the Domain name then it will also return the Domain name and
+             visa-versa when created using a URI then the URI will be returned by this
+             operation. The configuration file, identified by the URI, specifies all
+             configuration details of the Domain
+            </p>
+         </li>
+         <li>C# API is now a fully supported API
+            <p>
+              <a href="csharp.html">View the C# documentation.</a>
+            </p>
+         </li>
+         <li>Allow multiple installations on Windows
+            <p>
+             In the V4 series OpenSplice DDS used system wide environment variables.
+             With OpenSplice DDS V5.1, these are not set. Note: Users will require
+             OpenSplice DDS PowerTools 2.3 to cope with this change.
+            </p>
+         </li>
+         <li>Dynamic Discovery
+            <p>
+            The existing topology-discovery mechanism of OpenSplice's Networking
+            Service is extended with a dynamic capability to discover and maintain
+            all relevant nodes in large-scale (WAN) systems. In such large-scale
+            systems,  static-unicast node pre-definition is not practical nor
+            sufficient and dynamic-multicast based discovery is typically not
+            supported or even allowed. The new dynamic discovery is based on
+            overlaying the physical network with a notion of 'Roles' and 'Scopes'
+            that represent 'area-of-interest regions' within the WAN domain such
+            that only nodes within the defined scope-of-interest will be
+            automatically discovered and their state maintained. In this way,
+            the scalability of the dynamic DDS-system is ensured whilst minimizing
+            the impact on the overhead of the required discovery process.
+            </p>
+            <p>
+            For more information see the NetworkService elements Role, Discovery,
+            Scope and ProbeList in the Deployment Guide.
+            </p>
+         </li>
+       </ul>
+    </p>
+
+    <h2><a name="issues_not_api">Fixed Bugs and Changes not affecting API</a></h2>
+    <p><h3>5.4.1</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            dds2241
+          </td>
+          <td>
+            <b>User-friendly size-specification</b><br/>
+            <i>
+              The OpenSplice shared memory database size can now be specified in M (megabytes) or G (gigabytes) instead of just bytes.
+              e.g. 256M, 2G.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7592/<br>
+            dds2367
+          </td>
+          <td>
+            <b>Report plug-in suppress ospl_error and ospl_info log output</b><br/>
+            <i>
+              When using a custom report plugin, it is not possible to suppress the output sent to
+              ospl-error.log and ospl-info.log files.
+              <br><br>
+              <b>Solution: It is now possible to configure whether or not
+              the output to ospl-error and ospl-info files need to be 
+              suppressed using the 
+              //OpenSplice/Domain/ReportPlugin/SuppressDefaultLogs tag.</b>
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2396 / bugzilla 37
+          </td>
+          <td>
+            <b>write_dispose() returning RETCODE_PRECONDITION_NOT_MET</b><br/>
+            <i>
+              Invoking write_dispose() passing HANDLE_NIL as second parameter returns RETCODE_PRECONDITION_NOT_MET
+              which conflicts with HANDLE_NIL (no handle) as stated in the manual.
+              <br><br>
+              <b>Solution: An additional check in an internal algorithm in the 
+              DataWriter has been added to ensure proper behaviour in this case.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7946<br>
+            dds2449
+          </td>
+          <td>
+            <b>OpenSplice services continue to run after the daemon process is terminated</b><br/>
+            <i>
+              Services do not detect when the splice deamon has crashed and keep running. When
+              the splice deamon crashes abruptly the services would never terminate
+              and had to be killed manually. 
+              <br><br>
+              <b>Solution: Services will now properly detect when the splice deamon is no longer
+              available in any situation. This is accomplished by means of a lease mechanism, 
+              where the splice deamon periodically renews a lease and services monitor this lease
+              and react once they detect it has not been renewed and thus expired. When the expired
+              lease of the splice deamon is detected it will result in the services shutting down in
+              a normal manner. This does imply that services at worst wait the maximum duration of the
+              lease, which by default has a duration of 60 seconds. If a quicker detection time is desired
+              the duration of the lease should be configured to a shorter time value. This lease duration
+              can be configured in the XML configuration at Domain/Lease using the OpenSplice DDS configurator tool.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            8246/<br>
+            dds2471
+          </td>
+          <td>
+            <b>DBMS Connect: Mapping with float types</b><br/>
+            <i>
+              Whilst not entirely sure as to why MySQL reports the column to be of 
+              type FLOAT, when it has been specified as REAL (and the sql-mode of
+              the connection/server contains REAL_AS_FLOAT).
+              <br><br>
+              <b>Solution: Extended DBMSConnect to be able to map both types on the internal float-type.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2513
+          </td>
+          <td>
+            <b>TimeToLive not being set on multicast messages</b><br/>
+            <i>
+              Only the default operating system TTL value was being used for multicast, but the 
+              user defined value for unicast and broadcast was being respected.
+              <br><br>
+              <b>Solution: Now propogate correctly the TTL value for multicast messages, with the TTL applying 
+              at the network partition level.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2521
+          </td>
+          <td>
+            <b>Error/success reporting on socket creation/binding incorrect in nw_socket_new()</b><br/>
+            <i>
+              The reporting of error/success in nw_socket_new(), was incorrect, 
+              which would lead to incorrect "success" message in the network tracing,
+              also not all errors result in a proper error message in the error-log 
+              if creation or initialisation of a socket fails.
+              <br><br>
+              <b>Solution: Reporting corrected.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2524
+          </td>
+          <td>
+            <b>java IDL generated files do not include the super.finalize() in finalize method</b><br/>
+            <i>The output of idlpp did not include a call from finalize() to super.finalize() which
+               is detected by static code analysis files.
+              <br><br>
+              <b>Solution: finalize() method now calls super.finalize().</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            8650<br/>
+            dds2526
+          </td>
+          <td>
+            <b>Creation of query on dataReaderView fails</b><br/>
+            <i>
+              Creation of query on dataReaderView fails when the query 
+              addresses attributes within a record.
+              <br><br>
+              <b>Solution:</b>Prefixing of the internal name of attributes has 
+              been moved to the correct internal component.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2535
+          </td>
+          <td>
+            <b>Robustness: Improve memory depletion detection so it accounts for free 'reusable' memory as well.</b><br/>
+            <i>In the 5.4 release of OpenSplice DDS a new threshold value for the shared memory usage was introduced. 
+               When the available shared memory became less then the value of the threshold then OpenSplice DDS would prevent
+               further allocations of data within shared memory. In the 5.4 version there was no recovery possible. Even if 
+               applications terminated and freed up memory and enough shared memory would be available, OpenSplice DDS would 
+               still not allow further allocations.  In effect once the threshold was reached it meant that the deamon had to be restarted.
+              <br><br>
+              <b>Solution: In this release the algorithm for detecting shared memory depletion has been improved to include freed memory in its calculations.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2540
+          </td>
+          <td>
+            <b>Support for resource_limits.max_instances on DataWriter.</b><br/>
+            <i>
+              Functionality added to provide OMG specification compliance.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            8813/<br>
+            dds2563
+          </td>
+          <td>
+            <b>DataReaderViewQuery created by MW08 sim is invalid, set_arg fail</b><br/>
+            <i>An invalid DataReaderViewQuery is constructed from a valid 
+               expression provided by the application. After creation it is not
+               possible to use it to read data or set its parameters due to
+               a wrong translation from the application attributes to the 
+               internal representation of these attributes. 
+              <br><br>
+              <b>Solution: The error in the mapping from application to 
+              internal attributes has been fixed.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2570
+          </td>
+          <td>
+            <b>Report plugin to fail on invalid configuration</b><br/>
+            <i>In v5.3 the report plugin was introduced, but on invalid configuration, would just
+            continue and ignore the report plugin. 
+              <br><br>
+              <b>Solution:The behaviour has been changed to fail when
+            invalid report plugin configuration is used.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2598
+          </td>
+          <td>
+            <b>Networking: MaxBurstSize is calculated using uncompressed sizes if compression is enabled</b><br/>
+            <i>If compression is enabled for a networkchannel, the MaxBurstSize limitatiuon for that channel 
+               still uses the uncompressed size of the messages. This results in far less data being out on the 
+               wire than that is allowed by the "MaxBurstSize" setting. If compression is enabled, the MaxBurstSize
+               limitation should be calculated over the compressed size.              
+              <br><br>
+              <b>Solution: "MaxBurstSize" computations moved to lower level in code to take account of compression.</b> 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2627
+          </td>
+          <td>
+            <b>The Tuner always displays the synchronous_write ReliabilityQoSPolicy attribute as false</b><br/>
+            <i>Due to an error in the parsing of the synchronous_write ReliabilityQosPolicy
+               attribute, the Tuner displayed the attribute as being false in
+               all cases.              
+              <br><br>
+              <b>Solution: The parsing algorithm for synchronous_write in the Tuner has been fixed.</b> 
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.4.0p1</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            8686/<br>
+            dds2556
+          </td>
+          <td>
+            <b>Durability service fails in an 8 node system</b><br/>
+            <i>
+              Due to a concurrency issue in the durability service, two threads
+              could modify/read a specific variable at the same time. If that
+              situation occurred it lead to a segmentation fault. The signal 
+              was caught and the service tried to clean up and terminate, but
+              went into a spinning loop as a result of that, which was the
+              second issue.   
+              <br><br>
+              <b>Solution: </b>Access to the variable is now protected to make
+              it thread-safe and also the service will no longer get 
+              into a spinning loop when an error occurs when the service 
+              terminates because of a signal.  
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.4.0</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            dds398
+          </td>
+          <td>
+            <b>Possible out of order delivery in case of ORDER_BY_SOURCE_TIMESTAMP.</b><br/>
+            <i>
+              In case of ORDER_BY_SOURCE_TIMESTAMP samples could be delivered out of order.
+              <br><br>
+              <b>Solution: </b> In case of KEEP_LAST this is now avoided by discarding samples
+               that have a timestamp that is older than the lastest consumed sample. Since
+               KEEP_ALL is not allowed to discard samples, it can still receive samples out of order.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bugzilla#34<br/>
+            dds478 / dds2353  
+          </td>
+          <td>
+            <b>Susbcribing with an illegal topic name cause core dump</b><br/>
+            <i>
+              The OMG specification states in Annex A.2 regarding the TOPICNAME that
+              a topic name is an identifier for a topic, and is defined as any 
+              series of characters ?a?, ..., ?z?, ?A?,..., ?Z?, ?0?, ..., ?9?, 
+              ?-? but may not start with a digit. OpenSplice will not accept - or /.
+              <br/><br/>
+              <b>Solution: </b>Ensured OpenSplice DDS is compliant with the 
+              OMG specification and added a better error message where invalid topic
+              names are used.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1504
+          </td>
+          <td>
+            <b>Windows builds put dll's in /lib</b><br/>
+            <i>
+              dll files should be placed in the bin directory.
+              <br/><br/>
+              <b>Solution: </b> Changed the packaging of the dll files and they now
+              appear in the bin directory.</a>
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            5218 / 7254 / 7255 <br/>
+            dds665 / dds2235 / dds2338 / dds2339
+          </td>
+          <td>
+            <b>Exhaustion of shared memory</b><br/>
+            <i>
+              When OpenSplice shared memory limit was exceeded then a crash would occur.               
+              <br/><br/>
+              <b>Solution: </b> Additional checking and configuration has been 
+              added to stop the crash from occurring and also notifying the application
+              developer with messages in the info log that shared memory is reaching 
+              pre-configured limits. <a href="#highlights">See the 5.4 release highlights
+              above</a>
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6925<br>
+            dds1948 / dds2054 
+          </td>
+          <td>
+            <b>Gracefully shutdown OpenSplice</b><br/>
+            <i>
+              Where OpenSplice has shutdown unexpectedly then it would leave invalid
+              processes and temporary files on windows.               
+              <br/><br/>
+              <b>Solution: </b> On startup of OpenSplice, invalid process and temporary
+              files are detected and removed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2277 
+          </td>
+          <td>
+            <b>Crash in create_datareader on ContentFilteredTopic that was created with incorrect filter</b><br/>
+            <i>
+              This was caused by an invalid user filter being added.
+              <br/><br/>
+              <b>Solution: </b>The invalid user filter is now handled correctly and error message reported.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2281
+          </td>
+          <td>
+            <b>The Durability Service ExpiryTime had a maximum value of 20 seconds</b><br/>
+            <i>
+              <br/><br/>
+              <b>Solution: </b>Removed the a maximum expiry time, so it is now unlimited.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7319<br>
+            dds2285
+          </td>
+          <td>
+            <b>The dispose_all command leads to a crash of the splice deamon on 
+            remote nodes where the topic/partition combination is not known.</b><br/>
+            <i>
+            When Node A issues a dispose_all command for a specific topic/partition
+            combination and this dispose all command is received by remote nodes 
+            where this topic/partition combination is not known, then a crash in 
+            the splice daemon is observed when the dispose_all command is processed
+            and the topic listeners are being retrieved.
+              <br/><br/>
+              <b>Solution: </b>When the splice daemon processes a dispose_all 
+              command it received and it has arrived at the point the topic 
+              listeners need to be received, it will now verify if the 
+              partition/topic combination is known. If the partition/topic 
+              combination is not known, it will not try to send a notification to 
+              the topic listener and thus avoid the crash.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7466<br>
+            dds2357
+          </td>
+          <td>
+            <b>DDS and ethernet connection problems on a multi ports computers</b><br/>
+            <i>
+              In OpenSplice DDSv5.2 when the default Ethernet card is not available
+              the first available multicast Ethernet card is selected, previous to 5.2
+              it was the first available broadcast address. However, this doesn't allow 
+              users to block all traffic if the default adapter is not available.
+              <br/><br/>
+              <b>Solution: </b>Two new configuration options have been added 
+              OpenSplice/NetworkService/General/NetworkInterfaceAddress and 
+              OpenSplice/NetworkService/General/NetworkInterfaceAddress[@forced]. For
+              OpenSplice/NetworkService/General/NetworkInterfaceAddress[@forced]
+              it specifies whether only the selected NetworkInterfaceAddress should
+              be used or others can be used too.
+              <li>false - Specifies that the NetworkInterfaceAddress is first used
+              but when not available another, when available, is used.(default).</li>
+              <li>true - Specifies that only the selected NetworkInterfaceAddress
+              can be used.</li>
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2404
+          </td>
+          <td>
+            <b>Errors in Ping Pong examples</b><br/>
+            <i>
+              The issue was caused by the pong implementation doing a "take" of some data,
+              and then writing this straight back to ping. The pong was receiving samples
+              that were invalid at the end of the run due to the ping's writer implicitly
+              unregistering the instances on shutdown (if there are no more samples in
+              the datareader for that instance, an invalid sample is generated).
+              These invalid samples are meant to be ignored by the user, instead pong was
+              forwarding on the samples.
+              <br/><br/>
+              <b>Solution: </b>Corrected the problem by adding checks of the form 
+              <br>
+                 if(infoList.value[j].valid_data)<br>
+              after a take is made and before it is forwarded.
+              
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2425
+          </td>
+          <td>
+            <b>idlpp error with typedef of an array with struct in a typedef of array of array with struct</b><br/>
+            <i>
+              <br/><br/>
+              <b>Solution: </b>Fixed idlpp to recursively resolve the actual type
+              of a typedef to assure typedefs of typedefs are processed correctly
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2426
+          </td>
+          <td>
+            <b>Value of the "MaxBurstSize" configuration of a networkchannel (200KB 
+               per resolutiontick) causes problems when running typical evaluation 
+               tests on an out-of-the-box configuration</b><br/>
+              <br/><br/>
+            <i>
+              <b>Solution: </b>Change made so default configuration is "unlimited"
+              for all practical networks in the foreseeable future.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            8686<br/>
+            dds2541
+          </td>
+          <td>
+            <b>Crash on restart of application or daemon</b><br/>
+            <i>
+              When using synchronous write, the splicedaemon or the application
+              itself could crash when terminating. This was caused by the fact
+              that an internal clean-up algorithm sometimes freed an object
+              twice causing the reference count of the object ending up to low.
+              The crash occurred when the reference count reached 0 and the 
+              object was accessed after that again.  <br/><br/>
+              <b>Solution: </b>Fixed the internal algorithm to prevent double
+              frees of the object.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.3.0p4</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7121/<br/>
+            dds2129
+          </td>
+          <td>
+            <b>Queried meta descriptor incorrect</b><br/>
+            <i>
+              The capability of querying for the XML metadescriptor string
+              for a specific application type did not return the correct
+              representation in some cases where cyclic dependencies between
+              types in modules existed.               
+              <br/><br/>
+              <b>Solution: </b>Fixed the internal algorithm that builds up the 
+              XML metadescriptor representation.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7373/<br/>
+            dds2312
+          </td>
+          <td>
+            <b>Crash in the tuner when using an enum</b><br/>
+            <i>
+              The Tuner tool internally using a fixed size buffer to store 
+              a key definition of a Topic. In case a key definition exceeded
+              this buffer, the tool crashed.               
+              <br/><br/>
+              <b>Solution: </b>Changed the fixed size buffer in a dynamically
+              allocated buffer based on the actual size of the key definition.
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7438/<br/>
+            dds2333
+          </td>
+          <td>
+            <b>Performance is too slow</b><br/>
+            <i>
+              The query optimiser failed to optimise queries for key fields due 
+              to some internal key name changes introduced by the implementation 
+              of DataReader instance key optimisations. This implied that 
+              all query read/take actions were linear searches.               
+              <br/><br/>
+              <b>Solution: </b>The DataReader Query constructor has been made 
+              aware of the name translation and now implements these 
+              translations during optimisations.
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2378
+          </td>
+          <td>
+            <b>MMF-store configuration should not be mandatory</b><br/>
+            <i>
+              The mapping-address and size configuration parameters for the
+              MMF based persistency implementation should be optional, 
+              reducing the complexity of out-of-the-box configuration. 
+              <br/><br/>
+              <b>Solution: </b>The mapping-address now by default lies directly
+              after the mapped database in virtual memory and is by default 
+              twice the size of the database to make sure all persistent data
+              and potentially one backup fit in there.  
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2417
+          </td>
+          <td>
+            <b>DLRL Java Doc from windows start menu gives incorrect doc</b><br/>
+            <i>
+              For the Windows platform not all DLRL documentation was in the
+              distribution and the link in the start menu did not point to the
+              correct page.              
+              <br/><br/>
+              <b>Solution: </b>Added the missing documentation to the distribution
+              and updated the link in the start menu.              
+            </i>
+          </td>
+        </tr>
+       </table>
+    </p>  
+    <p><h3>5.3.0p3</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            dds2362
+          </td>
+          <td>
+            <b>Deadlock possible with shutdown of splice daemon</b><br/>
+            <i>
+              Clean up code in the splice daemon could become locked due to
+              a race condition.              
+              <br/><br/>
+              <b>Solution: </b>Re-factored the clean up process to eliminate
+              the race condition.              
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            5097/<br/>
+            dds729
+          </td>
+          <td>
+            <b>Splice daemon may consume 100% CPU.</b><br/>
+            <i>
+              When using multiple domains on Windows, services and application 
+              processes sometimes requested access to a domain from the
+              wrong splice daemon. This caused unpredictable behaviour in both
+              services and user applications. 
+              <br/><br/>
+              <b>Solution: </b>As there is only one splice daemon per domain the 
+              domain name has been made part of the name of the pipe making the 
+              pipe name unique. Furthermore, an illegal request from the 
+              Tuner tool to the splice daemon pipe on initialisation has been 
+              removed.             
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7162/<br/>
+            dds2164
+          </td>
+          <td>
+            <b>OSPL takes a long time to stop.</b><br/>
+            <i>
+              Update on previous fix to allow handling of 0.0 instead of just 0 
+              for time argument. 
+              <br/><br/>
+              <b>Solution: </b>Corrected parameter handling.                          
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7319/<br/>
+            dds2285
+          </td>
+          <td>
+            <b>Using dispose_all_data can cause the splice daemon to crash</b><br/>
+            <i>
+              When a remote node calls a dispose on a local topic instance that does not
+              exist then splice daemon will crash
+              <br/><br/>
+              <b>Solution: </b>Check to ensure local topic instance exists and if not
+              then queue the dispose request until it does.</b> 
+            </i>  
+          </td>
+        </tr>
+      </table>
+    </p> 
+
+    <p><h3>5.3.0p2</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7444/<br/>
+            dds2384
+          </td>
+          <td>
+            <b>Incorrect memory allocation causing ospl deamon to stop immediately after starting</b><br/>
+            <i>
+              The implementation of the code to externally monitor OSPL instances 
+              on local/remote node used strlen incorrectly causing memory corruption.
+              This can have the effect of causing the ospl daemon to stop immediately
+              after starting.
+              <br/><br/>
+              <b>Solution: </b>Remove the use of strlen and use MAX_HOST_NAME_LENGTH
+              variable.       
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2180
+          </td>
+          <td>
+            <b>Windows cannot start and stop 2 separate spliceds with separate domains</b><br/>
+            <i>
+              An error occurred starting 2 separate spliceds and domains on the same
+              windows machine. This was because the _ospl_servicePipeName parameter 
+              is not unique:  When the second spliced is started is uses the same pipe 
+              name (and as the max instances param is set to 8) CreateNamedPipe fails 
+              because it has exceeded the max instances. 
+              <br/><br/>
+              <b>Solution: </b>As there is only one splice daemon per domain the domain 
+              name has been made part of the name of the pipe making the pipe name 
+              unique.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>         
+
+    <p><h3>5.3.0p1</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7444/<br/>
+            dds2367
+          </td>
+          <td>
+            <b>Problems with OSPL Log Report Plugin</b><br/>
+            <i>
+              The initialize and finalize methods of the report plugin were
+              being called twice. This was because the report plugin registration
+              and unregister had been implemented in 2 different places 
+              but were actually only needed in 1 place.
+              This also caused the report method of the report plugin to be
+              called after the finalize method had been called.
+              <br/><br/>
+              <b>Solution: </b>Changed implementation to only call report plugin
+              register and unregister once.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>   
+
+    <p><h3>5.3</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            6494<br>
+            dds1506
+          </td>
+          <td>
+            <b>Datareaderlistener is still being triggered while the datareader 
+            and all related objects have already been freed</b><br/>
+            <i>
+              When a datareader is being deleted at the same time it is being 
+              triggered asynchronously via on_data_available() then the 
+              application may crash. This is caused by an incorrect check that
+              validates whether or not a listener thread should be terminated.
+              <br/><br/>
+              <b>Solution: </b>The error in the checking algorithm has been
+              repaired.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1629
+          </td>
+          <td>
+            <b>More helpful error message when using Tuner</b><br/>
+            <i>
+              When using the Tuner, an error message "Supplied URI is not available" would be 
+              returned, but this could occur if the URI is not available or the 
+              shared memory segment could not be mapped. 
+              <br/><br/>
+              <b>Solution: </b>The error message has been updated.
+            </i>  
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2054
+          </td>
+          <td>
+            <b>Gracefully shutdown OpenSplice on machine shutdown</b><br/>
+            <i>
+              If a machine is shutdown during the operation of OpenSplice, it is possible
+              that OpenSplice will not adequately clean up all temporary resource files.  This
+              can be particularly an issue on Windows because the shared memory is represented
+              by a mapping to a physical file and can cause problems restarting the domain.
+              <br/><br/>
+              <b>Solution: </b>On Windows, "ospl start" has been improved to check for and remove
+              resource files that do not relate to running processes, prior to starting the domain.
+              In future releases this will be improved to remove OpenSplice processes that may be
+              running but are associated with invalid resources file.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7051<br>
+            dds2071
+          </td>
+          <td>
+            <b>-n option added to idlpp to override the suffix for the ORB header file include</b><br/>
+            <i>
+               -n &lt;include-suffix&gt; <br>
+               Overrides the suffix that is used to identify the ORB dependent
+               header file (specifying the data model) that needs to be included.
+               Normally the name of this include file is derived from the IDL
+               file name and followed by an ORB dependent suffix (e.g. 'C.h'
+               for ACE-TAO based ORBs).
+               This option is only supported in Corba cohabitation mode for C++.
+               In all other cases it is simply ignored.<br>
+               Example usage: -e .stub.hpp<br>
+               (For a file named 'foo.idl' this will include 'foo.stub.hpp'
+               instead of 'fooC.h', which is the default expectation for ACE-TAO.)
+            </i>
+          </td>
+        </tr>    
+        <tr>
+          <td>
+            dds2081
+          </td>
+          <td>
+            <b>Issues with compliance of tooling over different platforms</b><br/>
+            <i>
+              The tooling delivered with OpenSpliceDDS (like mmstat) did
+              not have the same command-line options on all supported platforms.
+              <br/><br/>
+              <b>Solution: </b>The options have been made consistent for all
+              supported platforms.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7068<br>
+            dds2083
+          </td>
+          <td>
+            <b>Memory leak for arrays</b><br/>
+            <i>
+              When an array was freed, and thus the references contained within 
+              that array, the size was incorrectly determined, which caused a 
+              memory leak as not all references were freed. 
+              <br/><br/>
+              <b>Solution: </b>So now when the collection is an array, the size 
+              is determined by the maximum size field of its type, which is 
+              always set, since an array is always fixed length.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2128
+          </td>
+          <td>
+            <b>Wireshark plug-in not compliant anymore</b><br/>
+            <i>
+              The Wireshark plug-in is no longer showing correct information
+              with the updates in the network format.
+              <br/><br/>
+              <b>Solution: </b>Updated the Wireshark plug-in to correctly 
+              interpret the newest networking format.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7162<br>
+            dds2164
+          </td>
+          <td>
+            <b>OpenSplice takes a long time to stop when using the ospl -f option</b><br/>
+            <i>
+              OpenSplice at least takes multiple seconds to terminate when 
+              sending a TERM signal.
+              <br/><br/>
+              <b>Solution: </b>Setting the configuration of the already 
+              existing ServiceTerminatePeriod to "0.0" will now be interpreted
+              by all OpenSplice services as immediate request to terminate
+              without cleaning up. As a result, all services terminate 
+              immediately and do not clean-up anything, except for the shared 
+              memory segment that is still destroyed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2228
+          </td>
+          <td>
+            <b>Registering a type compiled with idlpp -j option causes JVM crash</b><br/>
+            <i>
+              Calling register_type on TypeSupport classes that have been 
+              generated using the "-j" option made the application crash. This 
+              was caused by the fact that an internal algorithm did not
+              substitute the name of the type with the by idlpp generated 
+              type name.
+              <br/><br/>
+              <b>Solution: </b>Extended the internal algorithm to substitute 
+              the name.
+            </i>
+          </td>
+        </tr>        
+        <tr>
+          <td>
+            dds2247
+          </td>
+          <td>
+            <b>Code generated by idlpp (C++) for multidimensional array does 
+            not compile</b><br/>
+            <i>
+              The IDL pre-processor did not generate correct code to copy the
+              contents of multidimensional arrays.
+              <br/><br/> 
+              <b>Solution: </b>Updated idlpp to correctly handle 
+              multidimensional arrays.
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            7272<br>
+            dds2254
+          </td>
+          <td>
+            <b>Error message not displayed</b><br/>
+            <i>The error message<br/>
+            "Description : shmat failed for 1 with errno 22 ()" is unclear.
+            <br/><br/>
+              <b>Solution: </b>Updated the error message to show the string
+              representation of the error between parentheses or show 
+              "Unknown error" otherwise.
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            dds2274
+          </td>
+          <td>
+            <b>Network communication on Windows does not work in case of multiple network partitions</b><br/>
+            <i>
+              When multiple network partitions were configured for the networking
+              service, communication on Windows did not occur due to a bug
+              in the algorithm that matches partition-topic combinations to 
+              a multicast address.
+              <br/><br/>
+              <b>Solution: </b>The error in the matching algorithm has been
+              repaired.
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            dds2276
+          </td>
+          <td>
+            <b>Network partition-name conversion to hash results in always the same hash</b><br/>
+            <i>
+              The networking service calculates a hash value for every
+              configured network-partition. Due to an error in the hash
+              algorithm the same hash was calculated for all network-partitions. 
+              <br/><br/>
+              <b>Solution: </b>The error in the hashing algorithm has been
+              repaired.
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            dds2278
+          </td>
+          <td>
+            <b>Not able to view all DDS nodes</b><br/>
+            <i>
+              When discovery for networking is enabled, the data that is 
+              published before the other node has been detected is not
+              forwarded by the networking service even though it does see the
+              information.
+              <br/><br/>
+              <b>Solution: </b>During the start-up of the networking service,
+              it will now initially assume there is a remote node available and
+              send the data over the network, before actually starting to
+              rely on discovery.  
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            7319<br/>
+            dds2285
+          </td>
+          <td>
+            <b>Using dispose_all_data can cause the splice daemon to crash</b><br/>
+            <i>
+              Sometimes internal transaction messages were accidently stored as 
+              actual application samples after they were handled.
+              <br/><br/>
+              <b>Solution: </b>The algorithm now checks whether a message is
+              a transaction message and if so, will not store it anymore.  
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            7329<br>
+            dds2294
+          </td>
+          <td>
+            <b>IDL Sequences in C#</b><br/>
+            <i>
+               Generated C# classes for a sequence of structures failed to write
+               a sample.
+               <br/><br/>
+              <b>Solution: </b>The marshallers for sequence of structures was 
+              incorrect and has now been fixed.
+            </i>
+          </td>
+        </tr> 
+        <tr>
+          <td>
+            7371<br>
+            dds2304
+          </td>
+          <td>
+            <b>Memory leak when continually registering and unregistering the same instance of a sample.</b><br/>
+            <i>
+              Some piece of administration in shared memory was not freed.
+              <br/><br/>
+              <b>Solution: </b>Made sure the administration is freed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7373<br>
+            dds2305
+          </td>
+          <td>
+            <b>mmstat does not display valid values for 64-bit architecture</b><br/>
+            <i>
+              The mmstat tool was not able to display memory sizes above the 
+              32-bit boundary, because a 32-bit type was used to store the
+              size. 
+              <br/><br/>
+              <b>Solution: </b>Updated the type of the field to be 64-bit
+              on 64-bit platforms.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bugzilla#34/<br/>
+            dds2309
+          </td>
+          <td>
+            <b>Memory growth (leak) in ospl when sending messages with strings in sequences</b><br/>
+            <i>
+              The memory used by ospl as reported by mmstat grows each time a 
+              message is sent when the message contains a sequence of strings 
+              or a sequence of structures that contain strings.<br/>
+              The internal algorithm that generically frees data in shared 
+              memory uses the available meta-data to know how to free the
+              data. Due to an error in the meta-data, the algorithm could 
+              omit freeing a structure, causing memory leakage.
+              <br/><br/>
+              <b>Solution: </b>Fixed the error in the meta-data for sequences.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2313
+          </td>
+          <td>
+            <b>Application may crash during execution when using sequences</b><br/>
+            <i>
+              The internal algorithm that generically frees data in shared 
+              memory uses the available meta-data to know how to free the
+              data. Due to an error in the meta-data, the algorithm could 
+              free a structure in the wrong way, causing the application to
+              crash.
+              <br/><br/>
+              <b>Solution: </b>Fixed the error in the meta-data for sequences.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7444/<br/>
+            dds2335
+          </td>
+          <td>
+            <b>Multiple instances with the same key</b><br/>
+            <i>
+              Character array fields can be marked to be stored as strings 
+              internally (using the pragma cats). When a sample is written in 
+              Java, the internal string had rubbish attached to the end of the
+              string.
+              
+              This was caused by the algorithm that copies samples from heap 
+              into shared memory since it did not add a '\0' terminator to the 
+              string in case the source is a character array causing the 
+              middleware to interpret the string up to the first '\0' in 
+              memory after the start of the string.
+              <br/><br/>
+              <b>Solution: </b>Extended the copy algorithm to add a '\0'
+              terminator at the end of the string.
+            </i>
+          </td>
+        </tr>
+     </table>   
+    </p>
+
+    <p><h3>5.2.4p2</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+          <td>
+            dds2462
+          </td>
+          <td>
+            <b>OpenSplice for Windows CE now uses the CeSetThreadPriority and CeGetThreadPriotiry functions for thread priority administration.</b>  This replaces the usage of the legacy SetThreadPriority and GetThreadPriotiry functions.<br/><br/>  A bug has also been fixed where some threads started within the OpenSplice daemon had the priority value of 0 rather than CE_THREAD_PRIO_256_NORMAL which maps to 251.<br/>
+          </td>
+        </tr>
+      </table>
+    </p>
+
+    <p><h3>5.2.1p3</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7444/<br/>
+            dds2367
+          </td>
+          <td>
+            <b>Problems with OSPL Log Report Plugin</b><br/>
+            <i>
+              The initialize and finalize methods of the report plugin were
+              being called twice. This was because the report plugin registration
+              and unregister had been implemented in 2 different places 
+              but were actually only needed in 1 place.
+              This also caused the report method of the report plugin to be
+              called after the finalize method had been called.
+              <br/><br/>
+              <b>Solution: </b>Changed implementation to only call report plugin
+              register and unregister once.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>            
+
+    <p><h3>5.2.1p1</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7157/<br/>
+            dds2158
+          </td>
+          <td>
+            <b>Bad parameter passing in reportPlugin initialize.</b><br/>
+            <i>
+             The report plug-in function definitions and calls did not comply 
+             with API defined in deployment guide<br/><br/>
+            <b>Solution: </b>The function definitions have been compliant with
+             the deployment guide.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7270/<br/>
+            dds2251
+          </td>
+          <td>
+            <b>Unable to publish an InternalFlight.</b><br/>
+            <i>
+            Java application crashes during the writing of a sample. The issue 
+            was that a size marker used in creating the Java meta data was of 
+            type "short", which is too small.<br/><br/>
+            <b>Solution: </b>A bug has been fixed in the Java implementation 
+            of OpenSplice which restricted the size of the meta model of an 
+            IDL component (as signified by a #pragma keylist) to 2^16 : 65536. 
+            This has been rectified and the maximum size of an IDL 
+            component's meta model is now 2^32 : 4294967296.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.2.1</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7247/<br>
+            dds2229
+          </td>
+          <td>
+            <b>The spliced process goes to 100% load</b><br/>
+            <i>
+            When running on a 64-bit platform, the spliced goes to 100% load
+            in some situations when accessing a virtual memory address above
+            the 32-bit range, because of a wrong cast being done in an internal
+            algorithm.<br/><br/>
+            <b>Solution: </b>The wrong cast has been corrected.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7250/<br/>
+            dds2237
+          </td>
+          <td>
+            <b>OSPL unable to create a 4GB shared memory segment</b><br/>
+            <i>
+            When specifying a database size over 2GB in the configuration file,
+            OpenSplice could not be started. This was caused by two things:
+            <ul>
+              <li>The size of the database was casted to a signed integer internally (so max 2GB)</li>
+              <li>The default address where it was mapped into the virtual address space of each
+              process participating in DDS conflicted with already existing
+              things that were mapped into a process</li>
+            </ul><br/><br/>
+            <b>Solution: </b>The size is now an unsigned long long for 64-bit
+            platform to solved the first issue. To solved the second issue, a 
+            default address of 0x140000000 has been configured for 64bit 
+            platforms, but the suitability of this value will vary depending on 
+            the size of the database that is required, and also with the process 
+            properties at the operating system level. If the address is not 
+            suitable, the error log file will describe this. On linux the 
+            "pmap" utility when ran with the "-x" option can be used to view 
+            the mapping addresses in use by a particular process.  A mapping 
+            address value is suitable if the addresses that immediately follow 
+            it (up to the size of the required database) are not in use.  
+            Refer to the OpenSplice_Deployment guide for details of the 
+            OpenSplice/Domain/Database/Address attribute.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2243
+          </td>
+          <td>
+            <b>Topic name for Read/Write access QoS policy interpreted as type name</b><br/>
+            <i>
+            The XML configuration allows for topic access elements 
+            ('OpenSplice/Domain/TopicAccess') to be defined which determine 
+            whether reader and/or writers are allowed to be created for a 
+            specific topic expression (by means of the 'topic_expression' 
+            attribute). A bug existed in the implementation of this feature 
+            where the topic expression was compared to the type name instead 
+            of the topic name. In effect no proper access control could be 
+            defined for topics.<br/><br/>
+            <b>Solution: </b>The implementation has been changed so that it now 
+            compares the topic expression with the topic name instead of the 
+            type name.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+
+    <p><h3>5.2</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            6488<br>
+            dds1513
+          </td>
+          <td>
+            <b>OpenSplice can be configured to allow a single application to operate in multiple domains</b><br/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6457<br>
+            dds1542
+          </td>
+          <td>
+            <b>Generation of additional inappropriate files from idlpp</b><br/>
+            <i>
+              If A.idl depends on B.idl, and A.idl defines a "pragma keylist", 
+              then we need to apply idlpp on B.idl too so that BSplDcps.h is generated.
+              However idlpp will also generate BDcps.idl which only contains 
+              namespaces and no struct.<br/><br/>
+              <b>Solution: </b>idlpp amended to generate only the appropriate files.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1619
+          </td>
+          <td>
+            <b>DDS shall provide a way to dispose all the instances of a topic in one call
+             and to notify the receivers in one notification</b><br/>
+            <i>See new features in 5.2 above.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1929
+          </td>
+          <td>
+            <b>Dynamic namespaces for durability</b>
+            <i>
+              <br/><br/>
+              <b>Solution: </b>OpenSplice DDS now supports more dynamic environments by 
+                 introducing dynamic namespaces. With a dynamic namespaces, the durability service 
+                 can determine at runtime if a previously unknown namespace discovered from another 
+                 node needs to be maintained and\or aligned locally. For more information see the related 
+                 documentation.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1958
+          </td>
+          <td>
+            <b>Warning when opensplice is close to exceeding its amount of configured shared memory</b>
+            <i>
+              <br/><br/>
+              <b>Solution: </b>OpenSplice DDS will now print a warning to the ospl-info.log file 
+              if the available, non fragmented shared memory is below 10% of the total available shared memory size.
+              This warning will only be printed once.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2099
+          </td>
+          <td>
+            <b>Process not terminating if several listeners attached to serveral entities</b><br/>
+            <i>
+              Using a domain participant in combination with a listener caused a deadlock situation
+              to occur within OpenSplice DDS in situations where the listener was processing events while the
+              DomainParticipant was already being deleted. The deletion operation would claim a mutex and 
+              perform various clean functions including stopping the listener thread and then waiting for it to
+              terminate. Meanwhile the listener thread could be processing some events and require the mutex lock
+              in use by the participant delete function.
+              <br/><br/>
+              <b>Solution: </b> Fix the delete function of the participant to release the mutex
+              while waiting for the listener thread to exit and reclaim it once the exit function returned.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7122<br>
+            dds2131
+          </td>
+          <td>
+            <b>Unclear error reports when osplconf updates the configuration</b><br/>
+            <i>
+              Configuration not parsed properly. <br/><br/>
+              <b>Solution: </b>Fixed an error in an XPath expression that is used 
+              internally to parse part of the configuration and improved the warning
+              messages that appear in the info-log file.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2145
+          </td>
+          <td>
+            <b>Developers needed to add dcpssacs.dll to the PATH to use C#</b>
+            <br><br> 
+            <b>Solution: </b>For C#, there is now a signed and versioned Assembly called dcpssacsAssembly.dll, created from the 
+            the dcpssacs.dll module, which is added to the Global Assembly cache. In this release, 
+            as part of the installation, this is added to the Global Assembly cache. 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2154
+          </td>
+          <td>
+            <b>SPLICE_ORB environment variable not set</b><br/>
+            <i>
+              In order to build the CORBA C++ example you require the SPLICE_ORB to be
+              set. This is not done in release.com for Unix systems. <br/><br/>
+              <b>Solution: </b>Added the variable to release.com.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7131/
+            dds2157
+          </td>
+          <td>
+            <b>OpenSplice release.com loads jar files at the end of CLASSPATH</b><br/><br/>
+            <i>
+               <b>Solution: </b>script fixed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7157/
+            dds2158
+          </td>
+          <td>
+            <b>Incorrect parameter passing in report plugin.</b><br/>
+            <i>
+               Parameter passing in the Report Plugin intialise function was incorrect.<br><br>
+               <b>Solution: </b>Small code error fixed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7156/
+            dds2159
+          </td>
+          <td>
+            <b>Missing report configuration in osplconf.</b><br/>
+            <i>
+               osplconf tool was not up to date with the deployment guide and did not
+               allow some of the configuration items to be set.<br><br>
+               <b>Solution: </b>Updated the configuration to match the deployment guide.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7158/
+            dds2160
+          </td>
+          <td>
+            <b>spliced crashes when adding a report plugin</b><br/><br/>
+            <i>
+               <b>Solution: </b>Small code error fixed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2163
+          </td>
+          <td>
+            <b>When using the pragma 'cats' in combination with multiple listed fields,
+             the IDLP Pre-processor would crash and not generate any code</b><br/>
+            <i>There was a bug within the IDL Pre-Processor idlpp which occured
+              when the 'cats' pragma directive was being evaluated and incorrectly take 2 fields from a list.
+              This caused a null pointer to be retrieved from the list in the next iteration,
+              where a valid field was expected, and idl would crash when the pointer was dereferenced.
+              <br/><br/>
+              <b>Solution: </b> The double take from the list has been removed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2167
+          </td>
+          <td>
+            <b>Example C#Visual Studio Solution and Project files should be valid for both VS2005 and VS2008</b><br/>
+            <i>In 5.1, the C# example projects would only support Visual Studio 2008
+              <br/><br/>
+              <b>Solution: </b> Projects are now created with Visual Studio 2008.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2173
+          </td>
+         <td>
+             <b>Coherent updates</b><br/>
+            <i>See new features in 5.2 above.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2188
+          </td>
+          <td>
+            <b>Builtin topic default QoS incorrect in relation to reliability.max_blocking_time</b><br/>
+            <i>
+              The specification specifies that the max_blocking_time of the reliability QoS should be 100ms.
+              Currently it isset to 0ms.
+              <br/><br/>
+              <b>Solution: </b>Updated code to set QoS to 100ms.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7190/<br>
+            dds2192
+          </td>
+          <td>
+            <b>Instances are unregistered on the DataWriter when its liveliness expires</b><br/>
+            <i>
+              All instances are unregistered on the DataWriter when its 
+              liveliness expires, but this is wrong behaviour. It causes write
+              calls with an instance-handle to return PRECONDITION_NOT_MET
+              after liveliness expires.
+              <br/><br/>
+              <b>Solution: </b>A DataWriter no longer unregisters its instances
+              when its liveliness expires. A DataReader does reset the ownership
+              of an instance when liveliness of DataWriter expires in case of 
+              exclusive ownership.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7186/<br>
+            dds2204
+          </td>
+          <td>
+            <b>Communication between different subnetworks not supported</b><br/>
+            <i>
+              To be able to communicate between different subnetworks the 
+              DontRoute networking service configuration option needs to be set
+              to false for all channels including discovery. Even though the 
+              networking service supports this configuration, the configurator 
+              tool did not offer this option for discovery. The same goes for
+              other send/receive options that are available for channels. 
+              <br/><br/>
+              <b>Solution: </b>The configurator has been extended to support all
+              send/receive options for networking discovery as for the channels.
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.1.1</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            dds2078
+          </td>
+          <td>
+            <b>Disabled factories default QoS settings not returned.</b><br/>
+            <i>
+              Default Qos settings for factories are not returned if the factory is in
+              a disabled state. If the caller did not initialize the Qos parameter 
+              (assuming get_default_qos would do that), then an uninitialized QoS 
+              would be returned. <br/><br/>
+              <b>Solution: </b>Removed the check for disabled factories, so that they 
+              are handled like enabled factories.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7104<br>
+            dds2108
+          </td>
+          <td>
+            <b>make_hde will not copy host libs for linux cross compile</b><br/>
+            <i>
+              If the host and target operating systems are the same, in this case Linux, 
+              but the target architectures are different the make_hde will not copy the host lib's. <br/><br/>
+              <b>Solution: </b>Changed the check in the make_hde script.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2133
+          </td>
+          <td>
+            <b>PATH environment variable corrupted by checkconf script on Windows build
+            when using Visual Studio 2008</b><br/>
+            <i>
+              The ospli/bin/checkconf script, which is included by configure, 
+              is responsible for checking build requirements and prepares the 
+              environment for building OpenSplice. The part of the script that 
+              checks the Microsoft toolchain contains an error when Visual Studio 2008
+              is detected. It uses 'cygpath -d' (line: 186) to translate a path 
+              but this returns the windows representation of the path (including c:\).
+              The result is then appended to the Unix PATH environment variable,
+              which uses ':' as a field seperator. This corrupts the PATH variable
+              which causes the build to fail.<br/><br/>
+              <b>Solution: </b>Script amended to handle windows paths correctly.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2165
+          </td>
+          <td>
+            <b>Set default QoS behaviour not compliant with the OMG specification.</b><br/>
+            <i>The factory operations set_default_xxx_qos() (where xxx represents
+            an entity type, i.e. topic, publisher, subscriber, datawriter and datareader)
+            do not work according to the DDS spec when their corresponding XXX_QOS_DEFAULT
+            label is passed as parameter. According to the DDS specification, the 
+            set_default_xxx_qos operation should in that case: "The special value
+            XXX_QOS_DEFAULT may be passed to this operation to indicate that the
+            default QoS should be reset back to the initial values the factory would
+            use, that is the values that would be used if the set_default_xxx_qos
+            operation had never been called."
+            <br><br> In OpenSplice DDS these operations either 
+            do nothing and return RETCODE_OK (e.g. set_default_publisher_qos), 
+            or return a RETCODE_BAD_PARAMETER (e.g. set_default_subscriber_qos).<br><br> 
+            <b>Solution: </b>Updated the functionality to behave as per the specification. 
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2177
+          </td>
+          <td>
+            <b>PartitionID changed to be byte swapped before being sent out over the network</b><br/>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.1.0p1</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            7053<br/>
+            dds2046
+          </td>
+          <td>
+            <b>When an application attach listeners, then it does not terminate and just hangs after the main thread finished.</b><br/>
+            <i>
+              Java 'hangs' on exit when not all DDS entities have been deleted.<br/><br/>
+              <b>Solution: </b>A shutdown hook is now installed on the JVM. 
+              The shutdown hook is installed during the first successful call on 
+              the DomainParticipantFactory.get_instance() operation. This 
+              shutdown hook will ensure all contained entities of the 
+              DomainParticipantFactory are deleted before the final shutdown 
+              of the JVM commences. Before this fix the contained entities 
+              where deleted during/after the final shutdown of the JVM which 
+              caused various JVM resources to be accessed by OpenSplice while 
+              they were no longer available.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7141<br/>
+            dds2143
+          </td>
+          <td>
+            <b>Code generation with OSPL IDL pre-processor fails for specific key types</b><br/>
+            <i>
+              The IDL pre-processor rejects usage of character arrays as key 
+              fields in IDL. This occurs even though the character array has 
+              been marked to be interpreted as a string internally by the 
+              middleware via a '#pragma cats' definition. The IDL pre-processor 
+              fails to recognize the '#pragma cats' definition during key field 
+              validation if it is located in a different module and/or in an 
+              included IDL file. Furthermore the IDL pre-processor incorrectly 
+              validates character arrays when they are used in combination with 
+              typedefs.<br/><br/>
+              <b>Solution: </b>The IDL pre-processor now is able to recognize 
+              the '#pragma cats' definition regardless of it's location and 
+              will also correctly resolve any used typedefs in determining 
+              whether or not a key field is a character array.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7140<br/>
+            dds2144
+          </td>
+          <td>
+            <b>TIMEOUT when writing a topic with synchronous reliability activated</b><br/>
+            <i>
+              When activating the synchronous reliability on DataReaders and 
+              DataWriters, the write returns an error code 10 (TIMEOUT) even 
+              with large timeout (5 secs).<br/><br/>
+              <b>Solution: </b>A fix has been implemented to prevent synchronous 
+              writers from blocking on ACKs from non-matching readers (i.e. 
+              subscribed on other topics). 
+              This was because when the writer was created, *all* synchronous 
+              readers were injected into its administration. But as the 
+              non-matching readers never received messages from this writer, 
+              they would never acknowledge and the writer would wait 
+              infinitely (until timeout).
+            </i>
+          </td>
+        </tr>
+      </table>
+    </p>
+    <p><h3>5.1.0</h3>
+      <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            4838<br/>
+            dds505
+          </td>
+          <td>
+            <b>Shared DataReaders needed for efficiency</b><br/>
+            <i>
+              Applications need facilities that allow them to share one
+              DataReader over multiple processes on the same node. This
+              allows reducing the memory footprint on a node significantly in
+              case a lot of applications are interested in the same data<br/><br/>
+              <b>Solution:</b>A new 'share' QoS policy has been introduced
+              in the SubscriberQos and DataReaderQos that allow applications
+              to share these entities.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1011
+          </td>
+          <td>
+            <b>Not all .bat files in the 'bin' directory of the release use Windows line endings</b><br/>
+            <i>
+              Some .bat files in the 'bin' directory of the Windows release use
+              UNIX-style line endings.<br/><br/>
+              <b>Solution:</b>Changed the line-endings of the .bat files to
+              Windows-style line-endings.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6569<br/>
+            dds1541
+          </td>
+          <td>
+            <b>OSPL does not generate default entry of switch of unions in C++</b><br/>
+            <i>
+             According to the IDL to C++ mapping, the IDL pre-processor
+             should generate a default entry for in case no all the possible
+             values of the switch are defined as cases and no default case is
+             modelled in IDL. Because this is not done, compiling the
+             generated code will show warnings.<br/><br/>
+              <b>Solution:</b>A default entry is now generated by the IDL
+              pre-processor to make sure compiling the generated code does not
+              show any warnings.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6556<br/>
+            dds1551
+          </td>
+          <td>
+            <b>User application conflict with cfg_parse operation</b><br/>
+            <i>
+              <br/>OpenSplice has a 'cfg_parse' function that is also used
+              a lot in other products. This leads to a name collision when
+              OpenSplice is used in combination with these other products.<br/><br/>
+              <b>Solution:</b>The 'cfg_parse' function has been renamed to
+              'cfg_parse_ospl' to prevent collisions.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1552
+          </td>
+          <td>
+            <b>Support for abstract domain identification in create_domain_participant</b><br/>
+            <i>
+              OpenSplice V4 and before only support URI as domain ID<br/><br/>
+              <b>Solution:</b>A DomainId consists of a string that represents either a URI to the
+               location of the configuration file (e.g. file:///projects/DDS/ospl.xml) or the
+               Domain name as specified in the configuration file. The actual value returned is
+               dependent of the value used when creating the DomainParticipant, also see the
+               DomainParticipantFactory create_participant operation. If a DomainParticipant
+               is created using the Domain name then it will also return the Domain name and
+               visa-versa when created using a URI then the URI will be returned by this
+               operation. The configuration file, identified by the URI, specifies all
+               configuration details of the Domain.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1677
+          </td>
+          <td>
+            <b>os_threadCreate failed because of wrong stack size</b><br/>
+            <i>
+              <br/>If on the system the PTHREAD_STACK_MIN is smaller than
+              OS_STACKSIZE_DEFAULT the call to pthread_attr_setstacksize in
+              os_threadCreate (POSIX) will fail.<br/><br/>
+              <b>Solution:</b>PTHREAD_STACK_MIN is now used instead.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6815<br/>
+            dds1829
+          </td>
+          <td>
+            <b>Persistent data can get lost</b><br/>
+            <i>
+              <br/>Due to the durability alignment strategy, persistent data can
+              get 'lost'. The durability when not master for a name-space sets
+              aside the locally stored persistent data set. Then it aligns with
+              the master. When during this process, the host is reset
+              (actively or power-fail), the persistent data-set may not be
+              complete.<br/><br/>
+              <b>Solution:</b>The durability service now stores information about
+              having a complete set or not on disk. If it detects on re-start that
+              the set is not complete, the 'old' set is restored and injected
+              instead to at least have a complete set of data.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1836
+          </td>
+          <td>
+            <b>On VxWorks - ospl reports warning sched_getscheduler failed with error 3 in cmsoap service</b><br/>
+            <i>
+              This occurs because the sched_getscheduler requires a task id in vxworks6.<br/><br/>
+              <b>Solution:</b>Properly handle the case when os_procAttrGetClass is called
+               by adding a vxworks6.x specific version of os_procAttrGetClass that passes
+               the current task id rather than process id to sched_getscheduler
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1844
+          </td>
+          <td>
+            <b>Addition of networking statistics</b><br/>
+            <i>
+              A large number of statistics for the networking service have been
+              added and these are now available in the OpenSplice Tuner. By
+              default, statistics are switched off. The enable them, the following
+              needs to be added to the configuration file under //OpenSplice/Domain:<br/>
+<pre>&lt;Statistics&gt;
+  &lt;Category name="networking" enabled="true"/&gt;
+&lt;/Statistics&gt;</pre>
+            </i>
+          </td>
+        </tr>        <tr>
+          <td>
+            dds1847
+          </td>
+          <td>
+            <b>Support multiple installations of OpenSplice DDS on Windows platforms</b><br/>
+            <i>
+              OpenSplice DDS uses system variables and thus installing a new
+              version of OpenSplice will overwrite the variables for the previous
+              installation.<br/><br/>
+              <b>Solution:</b>OpenSplice does not use system variables anymore.
+              A release.bat script is available in the installation directory to
+              configure your environment.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6792<br/>
+            dds1865
+          </td>
+          <td>
+            <b>The IDL pre-processor must report unsupported key types</b><br/>
+            <i>
+              The IDL pre-processor does not report illegal key fields in a
+              type when the attributes are there, but the type of the attributes
+              is not supported as a key field. Besides that, it also still
+              generated code, causing problems with this code only at run-time.<br/><br/>
+              <b>Solution:</b>The IDL pre-processor now reports unsupported
+              key fields and does not generate any code in that situation.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1894
+          </td>
+          <td>
+            <b>durability: Two nodes select each other as master, blocking alignment</b><br/>
+            <i>
+              Due to an error in the algorithm that determines the master-ship of
+              a durability service, multiple masters can appear, causing the
+              alignment of non-volatile data to fail.<br/><br/>
+              <b>Solution:</b>The error in determination of the master has been
+              repaired.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1899
+          </td>
+          <td>
+            <b>Asymmetric NetworkPartition configuration</b><br/>
+            <i>
+              Right now networkPartitions are characterized by an ID that's
+              determined by the order in which they're defined in the config-file.
+              This does NOT allow for asymmetric configuration. <br/>
+              <b>Solution:</b>A name-hash is calculated to create an ID that
+              allows asymmetric configuration of networkPartitions over nodes.
+            </i>
+          </td>
+        </tr>
+         <tr>
+          <td>
+            6861<br/>
+            dds1903
+          </td>
+          <td>
+            <b>Network partition expression more limited than described and needed</b><br/>
+            <i>
+              <br/>The network partition.topic expression is more limited than
+              described in the deployment manual regarding the usage of
+              wild-cards ('*').<br/><br/>
+              <b>Solution:</b>Wild-cards are now supported on all levels for
+              network-partitions.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1914
+          </td>
+          <td>
+            <b>Improve reporting of non-matching topics</b><br/>
+            <i>
+              Currently when an application creates a topic that already exists
+              in the system it will be compared against the existing one and the
+              creation will fail if the definition is not equal.
+
+              The error reports that are generated are not useful as they often
+              do not report the topic name. It would be very helpful if users
+              know which topic creation fails and what the cause is,
+              preferable also report conflicting values.<br/><br/>
+              <b>Solution:</b>The type name of the topic is now reported when
+              the user tries to create a topic with the same name but a
+              different type.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6879<br/>
+            dds1921
+          </td>
+          <td>
+            <b>Illegal object reported followed by segmentation faults</b><br/>
+            <i>
+              <br/>Applications sometimes report detecting an illegal
+              object after which they crash. This is caused by an
+              inconsistency in the kernel instance administration.<br/><br/>
+              <b>Solution:</b>The error in the internal administration of
+              instances in the kernel has been corrected.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1926
+          </td>
+          <td>
+            <b>Setting parameters of a query is too expensive</b><br/>
+            <i>
+              <br/>Setting a parameter on a simple query
+              (using only '=' i.c.w. AND) is too expensive and results in
+              congestion on the memory manager.<br/><br/>
+              <b>Solution:</b>Instead of fully reconstructing a query, only the
+              parameters are now changed for simple queries.
+            </i>
+          </td>
+         </tr>
+         <tr>
+          <td>
+            dds1932
+          </td>
+          <td>
+            <b>State the paths of the ospl-info and  ospl-error files immediately after running ospl start</b><br/>
+          </td>
+         </tr>
+         <tr>
+          <td>
+            6904<br/>
+            dds1938
+          </td>
+          <td>
+            <b>Set query parameters should reset the query cache</b><br/>
+            <i>
+              <br/>Setting the query parameters should reset the query cache
+              because the query when executed over the reader database might
+              pass samples with the new arguments. This causes the reader not
+              to trigger the application when new data arrives and also can
+              lead to the situation in which an application cannot read any
+              data from the reader, even though there is data.<br/><br/>
+              <b>Solution:</b>The cache is now re-evaluated when a query is
+              modified and also when historical data is delivered.
+            </i>
+          </td>
+         </tr>
+         <tr>
+          <td>
+            dds1946
+          </td>
+          <td>
+            <b>Corrupted caching instance pipeline</b><br/>
+            <i>
+              <br/>The instance pipeline in the kernel is formed by caching
+              destination instances at source instances. The design supports
+              disconnecting sources but disconnecting destination instances is
+              poorly implemented. This may lead to corrupted instance caches
+              and in some cases temporary memory leakage.<br/><br/>
+              <b>Solution:</b>The pipeline implementation has been modified to
+              allow disconnecting destination instances also.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1947
+          </td>
+          <td>
+            <b>Default JDK is now Java 6</b><br/>
+            <i>
+              OpenSplice DDS V5 is compiled with JDK6, but is compatible
+              with JDK5 as we use the -source 1.5 flag
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1965
+          </td>
+          <td>
+            <b>Persistent data-store completeness needs to be communicated to late-joining nodes</b><br/>
+            <i>
+              When nodes are aligned simultaneously, it is possible for them
+              to detect whether they did receive a consistent (complete) persistent
+              data-set or not. In this scenario, these nodes can take action to
+              prevent injection of incomplete persistent data the next time the
+              node starts.
+
+              However, for late joining nodes there is no way to detect if a
+              currently available persistent set is complete/consistent. Therefore,
+              if a system would be restarted, and a previous late joining node
+              from a system where incomplete persistent data was injected would
+              become master for this set, injection of incomplete data would happen.<br/><br/>
+
+              <b>Solution:</b>Late joining nodes get information about persistent
+              data completeness of other nodes.<br/>
+
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+           dds1986
+          </td>
+          <td>
+            <b>Problem with persistent topic having exclusive ownership strength</b>
+            <p>Because exclusive persistent/transient samples were not stored
+             correctly, writers that no longer existed (for example from a
+             persistent store) could in some cases prevent new writers from
+             writing new data.<br/><br/>
+             <b>Solution:</b>Instances from a persistent store are now always
+             implicitly unregistered. Modifications have been made to prevent
+             storing persistent register/unregister messages, since these are
+             now both implicit. Furthermore, the durability service will maintain
+             data according to the OwnershipQosPolicy that is set in the
+             TopicQos.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6989<br/>
+            dds1988
+          </td>
+          <td>
+            <b>Linux 64 bit crashes when using a shared memory address above the 4GB range</b><br/>
+            <i>
+              When using a shared memory address which is not aligned on 8192
+              bytes, OpenSplice DDS would crash.<br/><br/>
+              <b>Solution:</b>Added functionality to print a warning in the info
+              log when the configured shared memory address is not aligned on
+              8192 bytes on 64-bit platforms. DDS will also automatically
+              select the next correctly aligned address and use that instead.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1998
+          </td>
+          <td>
+            <b>Problem with unions in durability in debug mode</b><br/>
+            <i>
+              Due to an invalid assertion, the durability service crashed in
+              debug mode when using specific constructions within a union.<br/><br/>
+              <b>Solution:</b>The invalid assertion has been removed.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1999
+          </td>
+          <td>
+            <b>Problem with durability when publishing a union with switch set to a value without corresponding case</b><br/>
+            <i>
+              Due to an invalid assumption in the serialization routines, the
+              durability service is not able to handle unions correctly when
+              the switch is set to a value without a corresponding case.<br/><br/>
+              <b>Solution:</b>The serialization routines have been updated to
+              handle these unions correctly.
+            </i>
+          </td>
+        </tr>
+         <tr>
+          <td>
+            dds2007
+          </td>
+          <td>
+            <b>Durability crashes when tracing is enabled and needs to print '%' character</b><br/>
+            <i>
+              <br/>The durability service crashes while tracing information when
+              there's a % in the path, because 'fprintf' takes it as format.<br/><br/>
+              <b>Solution:</b>The information to print using 'fprintf' is done
+              using a format with the string as argument instead of directly
+              printing the string.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2013
+          </td>
+          <td>
+            <b>idlpp doesn't allow typedef of interface</b><br/>
+            <i>
+              Even though no code is generated for (typedefs of) interfaces by
+              the IDL pre-processor, it should still allow these constructions
+              to be modelled in IDL. <br/><br/>
+              <b>Solution:</b>The IDL pre-processor has been modified to ignore
+              typedefs of interfaces as well.
+            </i>
+          </td>
+        </tr>
+         <tr>
+          <td>
+            7012<br/>
+            dds2015
+          </td>
+          <td>
+            <b>idlpp truncates case label in case of enumeration for java</b><br/>
+            <i>
+              <br/>If the enumeration label inclusive it's scope is larger than
+              100 characters, the label truncated to 99 characters.<br/><br/>
+              <b>Solution:</b>The length of an enum label is now dynamically
+              determined.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2022
+          </td>
+          <td>
+            <b>cppgen for Windows can not handle multiple #includes unless
+            separated by more than a new-line</b><br/>
+            <i>
+              In cpp (C Pre Processor) this occurs when you do not have a carriage
+              return at the end of an included idl files and there is another
+              idl file included after it.<br/><br/>
+              <b>Solution:</b>The cpp has been modified to handle this situation
+              correctly.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6974/7023<br/>
+            dds2025/dds2089
+          </td>
+          <td>
+            <b>CTRL+C in Java has no effect, JVM must be shutdown using KILL -9</b><br/>
+            <i>
+              <b>Solution:</b>The exit handling in DDS has been tightened by installing
+              a shutdown hook to ensure that all the DDS entities are cleaned up and
+              therefore processes can terminate.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            6861<br/>
+            dds2029
+          </td>
+          <td>
+            <b>u_queryNew accesses unset variable copy</b><br/>
+            <i>
+              <br/>In the function u_queryNew the variable copy is accessed and
+              used to dispose (q_dispose) while it's value has not been set.<br/><br/>
+              <b>Solution:</b>The variable is no longer disposed when it has
+              not been set.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          dds2043
+          </td>
+          <td>
+            <b>Allow bigger value of InitialDiscoveryPeriod</b>
+            <p>The InitialDiscoveryPeriod max value allowed is 10s. More is
+            required by customers. <br/><br/>
+            <b>Solution:</b>The maximum value for InitialDiscoveryPeriod is now
+            set to 60 seconds
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2045
+          </td>
+          <td>
+            <b>PolySpace issues</b><br/>
+            <i>
+              <br/>Static code analysis with PolySpace demonstrates some
+              (potential) problems in the code-base.<br/><br/>
+              <b>Solution:</b>The detected problems in the code have been repaired.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            7062<br/>
+            dds2072
+          </td>
+          <td>
+            <b>Deadlock in Opensplice callstack when calling write() and take()
+               at the same time</b><br/>
+            <i>
+              Due to an error in the internal locking strategy in the OpenSplice
+              kernel, an application can get into a deadlock when three threads are
+              concurrently operating on the same set of objects.<br/><br/>
+              <b>Solution:</b>The error in the internal locking strategy has been
+              repaired.
+            </i>
+          </td>
+        </tr>
+     </table>
+    <h2><a name="issues_api">Fixed Bugs and Changes affecting API</a></h2>
+   <p>
+       <h3>5.4.0</h3>
+       <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+          dds2323
+          </td>
+          <td>
+            <b>Implementation of new DataWriter and DataRead API</b><br/>
+            <i>
+               DataWriter; get_matched_subscriptions(), get_matched_subscription_data()
+               and get_publication_matched_status()<br><br>
+               DataReader; get_matched_publications(), get_matched_publication_data() and
+               get_subscription_matched_status()<br><br>
+               DataWriterListener; on_publication_matched()<br><br>
+               DataReaderListener; on_subscription_matched()</i>  
+          </td>
+        </tr>
+       </table>
+     </p>
+       <h3>5.3.0</h3>
+        <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            dds845
+          </td>
+          <td>
+            <b>DestinationOrderQosPolicy value is not listed in the language specific DCPSPublication topic</b><br/>
+            <i>
+              The DDS 1.1 specification mistakenly forgot to mention the DestinationOrderQosPolicy
+              in the DCPSPublication builtin topic, which should have been there since the policy is marked
+              as being RxO. This omission was repaired in the DDS 1.2 specification. <br><br>
+              Although the DestinationOrderQospolicy is actually transmitted in the DCPSPublication builtin topic,
+              it still misses in the language specific representation for C, C++ and Java.
+              <br/><br/>
+              <b>Solution: </b>Added the C, C++ and Java representations for DestinationOrderQospolicy.          
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds2220
+          </td>
+          <td>
+            <b>The get_key_value() method implementation on the dataReader is missing</b><br/>
+            <i>
+              The DataReader misses the specified get_key_value() method.  
+              <br/><br/>
+              <b>Solution: </b>Implemented the missing get_key_value() method 
+              on the dataReader.
+            </i>  
+          </td>
+        </tr>    
+       </table>
+     </p>
+     <p>
+       <h3>5.1.0</h3>
+        <table width="90%">
+        <tr>
+          <th width="14%">
+            Report ID.
+          </th>
+          <th width="86%">
+            Description
+          </th>
+        </tr>
+        <tr>
+          <td>
+            GEN_7<br/>
+            dds1577
+          </td>
+          <td>
+            <b>Report Plug-In facility</b><br/>
+            <i>
+              See the release highlights section
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DDS_4<br/>
+            dds1578
+          </td>
+          <td>
+            <b>Network level compression</b><br/>
+            <i>
+              See the release highlights section
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            DDS_29<br/>
+            dds1617
+          </td>
+          <td>
+            <b>Create a persistent snapshot</b><br/>
+            <i>
+              The durability service allows an application to request a snapshot of the values of instances of a topic.
+              A snapshot consists of a copy of the current persistent data in a new file, the name of which is provided by the application.
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            dds1837
+          </td>
+          <td>
+            <b>The C++ API does not support all Quality of Service</b><br/>
+            <i>
+              The C++ API (sacpp & ccpp) did not support the following QoS;
+              <ul>
+                 <li>subscriber.share</li>
+                 <li>datareader.share</li>
+                 <li>datareader.reader_lifespan</li>
+                 <li>datareader.subscription_keys</li>
+                 <li>datareader.reader_data_lifecycle</li>
+                 <li>DataReaderViewQos</li>
+                 <li>viewKeyQosPolicy</li>
+              </ul><br/>
+              <b>Solution:</b>QoS-ses are now implemented
+            </i>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bugzilla#32
+          </td>
+          <td>
+            <b>IDL array of arrays generates code that dosn't compile with standalone C++ mapping</b><br/>
+            <i>
+              <code>idlpp / cppgen</code> bug fixed such that the following IDL now generates compilable code: <code>typedef unsigned short Matrix[1024][1024];</code>
+            </i>
+          </td>
+        </tr>
+     </table>
+    </p>
+
+    <p>
+    <br/>
+    <hr>
+    <p>
+      <a target="_top" href="http://www.prismtech.com">
+      <img src="../images/logo_prismtech2.jpg" align="right"
+           width="112" height="29" border="0" alt="PrismTech"></a>
+      <a href="#top" target="_self">
+      <img src="../images/top.gif" width="32"
+           height="32" border="0" alt="TOP"></a><br/>
+      <a href="#top" target="_self">Top</a>
+    </p>
+  </body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,2 @@
+"$OSPL_HOME/bin/ospl_wincmd" lib -o "$@" 
+true
