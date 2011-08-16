@@ -168,3 +168,12 @@ install-sh
 ltmain.sh
 m4/
 missing
+Makefile
+libtool
+.deps/
+Makefile.in
+config.log
+config.status
+configure.ac
+depcomp
+libtool
