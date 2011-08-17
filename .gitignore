@@ -177,3 +177,4 @@ config.status
 configure
 depcomp
 libtool
+ylwrap
