@@ -40,8 +40,8 @@
  * no multiple reader can own the rwlock.
  */
 
-#include "os_rwlock.h"
+#include <os_rwlock.h>
 
 /* include OS specific multiple reader writer implementation	*/
-#include "code/os_rwlock.c"
+#include <code/os_rwlock.c>
 

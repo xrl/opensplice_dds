@@ -30,7 +30,7 @@
  * by the same thread.
  */
 
-#include "os_mutex.h"
+#include <os_mutex.h>
 
 /* include OS specific mutual exclusion semaphore implementation */
-#include "code/os_mutex.c"
+#include <code/os_mutex.c>

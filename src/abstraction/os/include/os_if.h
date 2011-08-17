@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 /* Include OS specific header file              */
-#include "include/os_if.h"
+#include <include/os_if.h>
 
 #if defined (__cplusplus)
 }

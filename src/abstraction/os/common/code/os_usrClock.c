@@ -19,7 +19,7 @@
 #include "os_time.h"
 #include "os_process.h"
 #include "os_defs.h"
-#include "os__time.h"
+#include "../../code/os__time.h"
 
 #ifdef VXWORKS_RTP
 #include <string.h>

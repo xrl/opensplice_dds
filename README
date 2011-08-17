@@ -1,12 +1,23 @@
 OpenSplice libdds
+=================
+
+A great suite of libraries for building application based on the concept of eventually-consistent object caches. Implements a suite of fine-grain QoS for controlling the usage of caches. Look at the sample's directory to see how to use the API. You should also look at the DDS spec to see how to use this thing.
+
+Why Fork?
+=========
+
+The build system need retooling. I want to cross-compile this library and the make menuconfig was not doing it for me.
+
+While I'm at it, I'll add support for OS X (my preferred dev box)
 
 Building for yourself
+=====================
 
 1. run "libtoolize -c" or "glibtoolize -c"
 2. autoreconf -fv --install
 
 Notes
-
+=====
 Now it looks like I'll have to wrestle with the platform specific files. This one file in particular shows some strong platform dependence.
 
   src/abstraction/pa/sparc/code/pa_abstract.c
@@ -19,3 +30,13 @@ Will also copy how Suricata auto-discovers the current platform and let me sub i
   Linux2.6  | x86_64
 
 I will leave the original code for sparc and solaris but since I do not have any of these platforms I will be leaving them as a TODO.
+
+Header portability
+==================
+http://www.gnu.org/s/hello/manual/autoconf/Header-Portability.html
+
+
+Contact Info
+============
+
+Please use github to send me comments or requests.

@@ -26,7 +26,7 @@
  * from heap and releasing allocated memory to heap.
  */
 
-#include "os_heap.h"
+#include <os_heap.h>
 
 /* include OS specific heap memory management implementation 	*/
-#include "code/os_heap.c"
+#include <code/os_heap.c>

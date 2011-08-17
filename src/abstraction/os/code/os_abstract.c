@@ -21,4 +21,4 @@
 #include "os_abstract.h"
 
 /* include OS specific PA abstraction implementation		*/
-#include "code/os_abstract.c"
+#include <code/os_abstract.c>

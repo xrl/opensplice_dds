@@ -19,7 +19,7 @@
  *  \brief socket management
  */
 
-#include "os_signal.h"
+#include <os_signal.h>
 
 /* include OS specific socket management implementation		*/
-#include "code/os_signal.c"
+#include <code/os_signal.c>

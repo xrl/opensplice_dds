@@ -34,7 +34,7 @@
  * Linux only supports bounded threads
  */
 
-#include "os_thread.h"
+#include <os_thread.h>
 
 /* include OS specific thread implementation			*/
-#include "code/os_thread.c"
+#include <code/os_thread.c>

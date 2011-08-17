@@ -20,7 +20,7 @@ extern "C" {
 #endif
 
 /* Include OS specific header file              */
-#include "include/os_socket.h"
+#include <include/os_socket.h>
 #include "os_if.h"
 
 #ifdef OSPL_BUILD_OSNET

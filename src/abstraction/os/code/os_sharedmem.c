@@ -41,7 +41,7 @@
  * (on all platforms, but the scope on UNIX like platforms is process).
  */
 
-#include "os_sharedmem.h"
+#include <os_sharedmem.h>
 
 /* include OS specific shared memory implementation		*/
-#include "code/os_sharedmem.c"
+#include <code/os_sharedmem.c>

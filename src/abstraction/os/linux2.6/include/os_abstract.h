@@ -18,7 +18,11 @@ extern "C" {
 #endif
 
 /* include OS specific PLATFORM definition file */
-#include <endian.h>
+#ifdef _ALLBSD_SOURCE
+	#include <machine/endian.h>
+#elif __linux__
+	#include <endian.h>
+#endif
 
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #define PA__LITTLE_ENDIAN

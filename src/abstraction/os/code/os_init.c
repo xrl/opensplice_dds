@@ -23,10 +23,10 @@
  * all resources still claimed.
  */
 
-#include "os_init.h"
+#include <os_init.h>
 
 /* include OS specific initialization implementation 		*/
-#include "code/os_init.c"
+#include <code/os_init.c>
 
 const char *
 os_versionString(void)

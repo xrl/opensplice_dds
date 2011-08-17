@@ -10,6 +10,6 @@
  *
  */
 
-#include "os_diag.h"
+#include <os_diag.h>
 
-#include "../common/code/os_diag.c"
+#include <common/code/os_diag.c>

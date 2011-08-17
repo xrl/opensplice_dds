@@ -43,7 +43,7 @@
  * implementation. The scope will then be system wide.
  */
 
-#include "os_cond.h"
+#include <os_cond.h>
 
 /* include OS specific condition variable implementation 	*/
-#include "code/os_cond.c"
+#include <code/os_cond.c>

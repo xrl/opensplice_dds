@@ -22,7 +22,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
-#include "../common/code/os_memMapFileHandle.c"
+#include <common/code/os_memMapFileHandle.c>
 
 /** Defines the permissions for the created memory mapped file */
 #define OS_PERMISSION \

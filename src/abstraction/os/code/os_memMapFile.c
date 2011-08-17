@@ -21,7 +21,7 @@
  *
  */
 
-#include "os_memMapFile.h"
+#include <os_memMapFile.h>
 
 /* include OS specific memory mapped file implementation		*/
-#include "code/os_memMapFile.c"
+#include <code/os_memMapFile.c>

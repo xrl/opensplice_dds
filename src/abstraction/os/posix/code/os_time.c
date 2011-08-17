@@ -19,7 +19,13 @@
 #include "os_report.h"
 
 #include <time.h>
+#include <sys/time.h>
 #include <errno.h>
+
+#ifdef __MACH__
+#include <mach/clock.h>
+#include <mach/mach.h>
+#endif
 
 static os_time (*clockGet)(void) = NULL;
 
@@ -34,24 +40,35 @@ os_time
 os_timeGet (
     void)
 {
-    struct timespec t;
-    int result;
-    os_time rt;
+  os_time rt;
+	#ifdef __MACH__
+	    // TODO: Check these mach return values
+  		clock_serv_t cclock;
+  	  mach_timespec_t mts;
+  	  host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
+  	  clock_get_time(cclock, &mts);
+  	  mach_port_deallocate(mach_task_self(), cclock);
+  	  rt.tv_sec = mts.tv_sec;
+  	  rt.tv_nsec = mts.tv_nsec;
+	#else
+	    struct timespec t;
+	    int result;
 
-    if (clockGet) {
-        rt = clockGet ();
-    } else {
-        result = clock_gettime (CLOCK_REALTIME, &t);
-        if (result == 0) {
-	    rt.tv_sec = t.tv_sec;
-	    rt.tv_nsec = t.tv_nsec;
-        } else {
-	    OS_REPORT_1 (OS_WARNING, "os_timeGet", 1, "clock_gettime failed with error %d", errno);
-	    rt.tv_sec = 0;
-	    rt.tv_nsec = 0;
-        } 
-    } 
-    return rt;
+	    if (clockGet) {
+	        rt = clockGet ();
+	    } else {
+	        result = clock_gettime (CLOCK_REALTIME, &t);
+	        if (result == 0) {
+		    rt.tv_sec = t.tv_sec;
+		    rt.tv_nsec = t.tv_nsec;
+	        } else {
+		    OS_REPORT_1 (OS_WARNING, "os_timeGet", 1, "clock_gettime failed with error %d", errno);
+		    rt.tv_sec = 0;
+		    rt.tv_nsec = 0;
+	        } 
+	    } 
+	#endif
+  return rt;
 }
 
 /** \brief Set the user clock

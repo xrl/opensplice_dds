@@ -10,6 +10,6 @@
  *
  */
 
-#include "os_report.h"
+#include <os_report.h>
 
-#include "code/os_report.c"
+#include <code/os_report.c>

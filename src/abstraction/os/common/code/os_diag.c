@@ -9,11 +9,11 @@
  *   for full copyright notice and license terms. 
  *
  */
-#include "os_diag.h"
-#include "os_time.h"
-#include "os_stdlib.h"
-#include "os_process.h"
-#include "os_thread.h"
+#include <os_diag.h>
+#include <os_time.h>
+#include <os_stdlib.h>
+#include <os_process.h>
+#include <os_thread.h>
 
 #include <stdarg.h>
 #include <string.h>
