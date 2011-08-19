@@ -178,3 +178,8 @@ configure
 depcomp
 libtool
 ylwrap
+
+# Introducing a build smell to support OpenSplice's weird Flex/Bison system
+q_parser.c
+src/database/database/code/q_parser.c
+src/database/database/include/q_parser.h
