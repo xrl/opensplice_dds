@@ -4,7 +4,7 @@
 AUTOMAKE_OPTIONS = foreign 1.4
 ACLOCAL_AMFLAGS = -I m4
 
-# SUBDIRS = src/abstraction/os/code
+EXTRA_DIST=src/database/database/code/q_parser.c src/database/database/include/q_parser.h
 
 lib_LTLIBRARIES = libddsos.la libddsutil.la libddsdatabase.la
 
@@ -36,6 +36,14 @@ libddsdatabase_la_SOURCES =	$(db_dir)/c_avltree.c $(db_dir)/c_base.c $(db_dir)/c
 	$(db_dir)/c_metafactory.c $(db_dir)/c_misc.c $(db_dir)/c_mmbase.c $(db_dir)/c_mmCache.c $(db_dir)/c_querybase.c \
 	$(db_dir)/c_scope.c $(db_dir)/c_serialize.c $(db_dir)/c_stringSupport.c $(db_dir)/c_sync.c $(db_dir)/c_time.c \
 	$(db_dir)/c_typebase.c $(db_dir)/q_expr.c \
-	$(db_dir)/q_parser.l $(db_dir)/q_parser.y
+	$(db_dir)/q_parser.c
+
+$(db_dir)/../include/q_parser.h : $(db_dir)/q_parser.l
+	$(LEX) $(LFLAGS) $(AM_LFLAGS) -Pq_parser_yy -o$(db_dir)/../include/q_parser.h $<
+$(db_dir)/q_parser.c : $(db_dir)/q_parser.y $(db_dir)/../include/q_parser.h
+	$(YACC) $(YFLAGS) $< -o $@
+
+# .l.c :
+#	asdfasdf $(am__skiplex) $(SHELL) $(YLWRAP) $< $(LEX_OUTPUT_ROOT).c $@ -- $(LEXCOMPILE)
 
 # gcc -m32 -static-libgcc -L/home/xlange/code/OpenSplice/lib/x86.linux2.6-dev -shared -fpic c_avltree.o c_base.o c_collection.o c_extent.o c_field.o c_iterator.o c_laptime.o c_metabase.o c_metafactory.o c_misc.o c_mmbase.o c_mmCache.o c_querybase.o c_scope.o c_serialize.o c_stringSupport.o c_sync.o c_time.o c_typebase.o q_expr.o q_parser.o -lc -lm -lpthread  -lddsos -lddsutil -o libddsdatabase.so
