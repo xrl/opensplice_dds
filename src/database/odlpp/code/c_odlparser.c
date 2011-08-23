@@ -35,6 +35,8 @@ main(
 
     if (argc < 2) {
         printf("Usage: %s [-m] <filename>\n", argv[0]);
+        printf("Options:\n");
+        printf("-m\t\t\tScoped names")
         return -1;
     }
 
