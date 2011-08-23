@@ -28,6 +28,7 @@ Will also copy how Suricata auto-discovers the current platform and let me sub i
   -----------------
   Linux2.6  | x86
   Linux2.6  | x86_64
+  Darwin    | x86_64
 
 I will leave the original code for sparc and solaris but since I do not have any of these platforms I will be leaving them as a TODO.
 
