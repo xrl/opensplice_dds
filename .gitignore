@@ -183,3 +183,5 @@ ylwrap
 q_parser.c
 src/database/database/code/q_parser.c
 src/database/database/include/q_parser.h
+*.lo
+*.la
