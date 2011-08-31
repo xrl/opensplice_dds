@@ -29,6 +29,12 @@ os_mutexAttrInit (
     os_mutexAttr *mutexAttr)
 {
     assert (mutexAttr != NULL);
-    mutexAttr->scopeAttr = OS_SCOPE_SHARED;
+
+    // Darwin does NOT support atomic access to mutexes across shared memory
+    #ifdef _POSIX_THREAD_PROCESS_SHARED
+    	mutexAttr->scopeAttr = OS_SCOPE_SHARED;
+    #else
+    	mutexAttr->scopeAttr = OS_SCOPE_PRIVATE;
+    #endif
     return os_resultSuccess;
 }
