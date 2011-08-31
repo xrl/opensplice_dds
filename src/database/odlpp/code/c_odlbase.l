@@ -292,7 +292,9 @@ extractToken(const char *_String)
        assert(compareStrings(_String, yylval.String) == 0);
        os_strncpy(yylval.String, &tmp[1], strlen(tmp) - 1);
        yylval.String[strlen(tmp) - 1] = '\0';
-		 free(tmp);
+       if(tmp){
+         free(tmp);
+       }
    }
 
    return Identifier;
