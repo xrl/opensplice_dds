@@ -47,7 +47,7 @@ INCLUDES := -Isrc/abstraction/os/code -Isrc/abstraction/os/include -Isrc/abstrac
  -Isrc/user/code \
  -Isrc/api/cm/xml/include \
  -Isrc/api/dcps/gapi/include \
- -Isrc/api/dcps/sacpp/include \
+ -Isrc/api/dcps/sac/include \
  -Isrc/tools/cppgen/include
 
 ##############################################################################
